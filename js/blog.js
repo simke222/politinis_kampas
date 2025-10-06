@@ -23,9 +23,9 @@ function formatDate(d){
   }catch{ return ''; }
 }
 async function fetchTextRaw(filename){
-  const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
+  const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${encodeURIComponent(GITHUB_BRANCH)}/posts/${encodeURIComponent(filename)}`;
   const r = await fetch(rawUrl);
-  if(!r.ok) throw new Error('raw fetch failed');
+  if(!r.ok) throw new Error(`Raw fetch failed for ${filename}`);
   return r.text();
 }
 function firstLines(text, nChars=220){
