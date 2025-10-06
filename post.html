@@ -9,71 +9,156 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+
+  <style>
+    body {
+      background: #0b0b0b;
+      color: #f8f8f8;
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    header {
+      background: #000;
+      border-bottom: 1px solid #222;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      color: #f5c518;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .nav a {
+      margin-left: 1rem;
+      color: #f8f8f8;
+      text-decoration: none;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      color: #f5c518;
+    }
+
+    main.article {
+      max-width: 850px;
+      margin: 3rem auto;
+      background: #111;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1, h2, h3, h4 {
+      color: #f5c518;
+      margin-top: 1.5rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: #ddd;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
+
+    pre {
+      background: #191919;
+      color: #f5c518;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      main.article {
+        margin: 1rem;
+        padding: 1.2rem;
+      }
+      header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">politinis_kampas</a>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="blog.html" class="active">Blog</a>
-        <a href="feed.html">RSS Feed</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </div>
+    <a class="brand" href="index.html">politinis_kampas</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="feed.html">RSS Feed</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
   <main class="container article">
     <article id="article">
       <h1 id="post-title">Loading…</h1>
       <p id="post-meta" class="card-meta"></p>
-      <div id="post-content" class="post-body muted">Fetching content…</div>
+      <div id="post-content" class="post-body">Fetching content…</div>
     </article>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <span>© <span id="year"></span> politinis_kampas</span>
-      <a class="rss" href="feed.html">RSS Feed Page</a>
-    </div>
+    <p>© <span id="year"></span> politinis_kampas</p>
+    <a class="rss" href="feed.html" style="color:#f5c518;">RSS Feed Page</a>
   </footer>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Config your repo here:
+    // Config
     const GITHUB_USER = 'simke222';
     const GITHUB_REPO = 'politinis_kampas';
     const GITHUB_BRANCH = 'main';
 
     const params = new URLSearchParams(location.search);
-    const filename = params.get('file'); // e.g., 2025-10-06-gaza-analysis.md
+    const filename = params.get('file');
 
-    function slugToTitle(slug){
-      // remove date prefix if present
-      const cleaned = slug.replace(/^\\d{4}-\\d{2}-\\d{2}-/,'').replace(/\\.(md|txt)$/,'');
+    function slugToTitle(slug) {
+      const cleaned = slug
+        .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+        .replace(/\.(md|txt)$/, '');
       return cleaned.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
 
-    function dateFromSlug(slug){
-      const m = slug.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);
-      if(!m) return '';
-      const d = new Date(+m[1], +m[2]-1, +m[3]);
-      return d.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'});
+    function dateFromSlug(slug) {
+      const m = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!m) return '';
+      const d = new Date(+m[1], +m[2] - 1, +m[3]);
+      return d.toLocaleDateString('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    async function loadPost(){
-      if(!filename){
+    async function loadPost() {
+      if (!filename) {
         document.getElementById('post-title').textContent = 'Post not found';
         document.getElementById('post-content').textContent = 'Missing ?file=… parameter.';
         return;
       }
 
       const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
-      try{
+      try {
         const res = await fetch(rawUrl);
-        if(!res.ok) throw new Error('Fetch failed');
+        if (!res.ok) throw new Error('Fetch failed');
         const text = await res.text();
 
         const title = slugToTitle(filename);
@@ -82,20 +167,21 @@
         document.title = `${title} — politinis_kampas`;
         document.getElementById('post-meta').textContent = date ? `${date}` : '';
 
-        // If .md → convert, if .txt → wrap in <pre>
         let html;
-        if(/\\.md$/i.test(filename)){
-          const conv = new showdown.Converter({simplifiedAutoLink:true, strikethrough:true, tables:true});
+        if (/\.md$/i.test(filename)) {
+          const conv = new showdown.Converter({
+            simplifiedAutoLink: true,
+            strikethrough: true,
+            tables: true,
+            emoji: true
+          });
           html = conv.makeHtml(text);
-        }else{
-          html = `<pre>${text.replace(/[&<>]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
+        } else {
+          html = `<pre>${text.replace(/[&<>]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[s]))}</pre>`;
         }
 
-        // Tip for images: use paths like "images/pic.jpg"
-        // (relative to this page), so keep your images in /images
         document.getElementById('post-content').innerHTML = html;
-
-      }catch(e){
+      } catch (e) {
         document.getElementById('post-title').textContent = 'Error loading post';
         document.getElementById('post-content').textContent = 'Could not fetch the file. Check file name and repo path.';
         console.error(e);
