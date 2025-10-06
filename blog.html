@@ -8,47 +8,39 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
+  <!-- Showdown for Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="./index.html">politinis_kampas</a>
+      <a class="brand" href="index.html">politinis_kampas</a>
       <nav class="nav">
-        <a href="./index.html">Home</a>
-        <a href="./blog.html" class="active">Blog</a>
-        <a href="./feed.html">RSS Feed</a>
-        <a href="./about.html">About</a>
-        <a href="./contact.html">Contact</a>
+        <a href="index.html">Home</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="feed.html">RSS Feed</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main class="container narrow">
-    <h1 class="page-title">All Blog Posts</h1>
+  <main class="container">
+    <h1 class="page-title">All Posts</h1>
+    <p class="muted">Drop <code>.md</code> or <code>.txt</code> files into <code>/posts</code>. Named like <code>YYYY-MM-DD-your-title.md</code>.</p>
 
-    <div id="posts" class="post-list">
-      <a class="post-item" href="./posts/post1.html">
-        <h2>Understanding Escalation Dynamics</h2>
-        <p class="card-meta">Sep 30, 2025 • Analysis • Europe</p>
-        <p>A quick framework for reading troop movements, signaling, and negotiation windows.</p>
-      </a>
-
-      <a class="post-item" href="./posts/post2.html">
-        <h2>Information Warfare 101</h2>
-        <p class="card-meta">Sep 25, 2025 • Explainer • Global</p>
-        <p>Spotting narratives, counters, and why timing matters more than volume.</p>
-      </a>
-    </div>
+    <!-- Magazine grid -->
+    <section id="blog-grid" class="feed-grid" aria-live="polite"></section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="year"></span> politinis_kampas</span>
-      <a class="rss" href="./feed.html">RSS Feed Page</a>
+      <a class="rss" href="feed.html">RSS Feed Page</a>
     </div>
   </footer>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+
+  <script src="js/blog.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
