@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — politinis_kampas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">politinis_kampas</a>
+      <nav class="nav">
+        <a href="./index.html">Home</a>
+        <a href="./blog.html">Blog</a>
+        <a href="./feed.html">RSS Feed</a>
+        <a href="./about.html">About</a>
+        <a class="active" href="./contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container narrow">
+    <h1 class="page-title">Contact</h1>
+    <p>For feedback, tips, or collaboration:</p>
+    <ul>
+      <li>Email: <a href="mailto:hello@politiniskampas.example">hello@politiniskampas.example</a></li>
+      <li>Twitter/X: <a href="#" rel="noopener">@politiniskampas</a></li>
+      <li>LinkedIn: <a href="#" rel="noopener">profile</a></li>
+    </ul>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> politinis_kampas</span>
+      <a class="rss" href="./feed.html">RSS Feed Page</a>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

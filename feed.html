@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>politinis_kampas — Live RSS Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">politinis_kampas</a>
+      <nav class="nav">
+        <a href="./index.html">Home</a>
+        <a href="./blog.html">Blog</a>
+        <a href="./feed.html" class="active">RSS Feed</a>
+        <a href="./about.html">About</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Live Conflict Headlines</h1>
+    <p class="muted">Sources: BBC World, Al Jazeera, Reuters (World). Updated on load.</p>
+
+    <div class="feed-controls">
+      <label>
+        Source:
+        <select id="source">
+          <option value="bbc">BBC World</option>
+          <option value="aljazeera">Al Jazeera</option>
+          <option value="reuters">Reuters World</option>
+        </select>
+      </label>
+      <label>
+        Max items:
+        <select id="limit">
+          <option>10</option>
+          <option selected>20</option>
+          <option>30</option>
+        </select>
+      </label>
+      <button id="refresh" class="btn">Refresh</button>
+    </div>
+
+    <section id="feed" class="feed-grid" aria-live="polite"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> politinis_kampas</span>
+      <a class="rss" href="./feed.html">RSS Feed Page</a>
+    </div>
+  </footer>
+  <script src="./js/feed.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
