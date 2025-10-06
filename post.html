@@ -4,113 +4,65 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Post — politinis_kampas</title>
-
+  <meta name="description" content="politinis_kampas — blog on world conflicts, analysis, and news." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="./favicon.ico" />
+
   <style>
     body {
-      background: #0b0b0b;
-      color: #f8f8f8;
-      font-family: 'Inter', system-ui, sans-serif;
-      line-height: 1.6;
+      background-color: #000;
+      color: #eee;
+      font-family: 'Inter', sans-serif;
       margin: 0;
+      padding: 0;
     }
-
-    header {
-      background: #000;
-      border-bottom: 1px solid #222;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
     }
-
-    .brand {
-      color: #f5c518;
-      font-weight: 700;
+    .site-header, .site-footer {
+      background-color: #000;
+      color: #ffcc00;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .site-header a, .site-footer a {
+      color: #ffcc00;
       text-decoration: none;
-      font-size: 1.2rem;
+      margin: 0 0.5rem;
     }
-
-    .nav a {
-      margin-left: 1rem;
-      color: #f8f8f8;
-      text-decoration: none;
+    h1, h2, h3, h4 {
+      color: #ffcc00;
     }
-
-    .nav a.active,
-    .nav a:hover {
-      color: #f5c518;
-    }
-
-    main.article {
-      max-width: 850px;
-      margin: 3rem auto;
-      background: #111;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    }
-
-    h1, h2, h3 {
-      color: #f5c518;
-      margin-top: 1.5rem;
-    }
-
     p {
-      margin: 0.5rem 0;
-      color: #ddd;
+      line-height: 1.6;
     }
-
-    img {
+    .post-body img {
       max-width: 100%;
-      border-radius: 10px;
+      border-radius: 8px;
       margin: 1rem 0;
     }
-
-    pre {
-      background: #191919;
-      color: #f5c518;
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      color: #999;
-    }
-
-    @media (max-width: 768px) {
-      main.article {
-        margin: 1rem;
-        padding: 1.2rem;
-      }
-      header {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
+    .card-meta {
+      color: #aaa;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">politinis_kampas</a>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="blog.html" class="active">Blog</a>
-      <a href="feed.html">RSS Feed</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
+    <a class="brand" href="index.html">politinis_kampas</a> |
+    <a href="blog.html">Blog</a> |
+    <a href="feed.html">RSS Feed</a> |
+    <a href="about.html">About</a> |
+    <a href="contact.html">Contact</a>
   </header>
 
-  <main class="container article">
+  <main class="container">
     <article id="article">
       <h1 id="post-title">Loading…</h1>
       <p id="post-meta" class="card-meta"></p>
@@ -119,92 +71,111 @@
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="year"></span> politinis_kampas</p>
-    <a class="rss" href="feed.html" style="color:#f5c518;">RSS Feed Page</a>
+    <div>
+      © <span id="year"></span> politinis_kampas |
+      <a href="feed.html">RSS Feed Page</a>
+    </div>
   </footer>
 
-  <!-- ✅ Load Showdown AFTER body so it's available -->
-  <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+  <!-- Load Marked library (Markdown parser) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+  <!-- Main JS logic for post rendering -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Config your repo here:
-  const GITHUB_USER = 'simke222';
-  const GITHUB_REPO = 'politinis_kampas';
-  const GITHUB_BRANCH = 'main';
+    // ====== Your GitHub repo details ======
+    const GITHUB_USER   = 'simke222';
+    const GITHUB_REPO   = 'politinis_kampas';
+    const GITHUB_BRANCH = 'main';
+    // =====================================
 
-  const params = new URLSearchParams(location.search);
-  const filename = params.get('file'); // e.g., 2025-10-06-gaza-analysis.md
+    const params = new URLSearchParams(location.search);
+    const filename = params.get('file'); // e.g., 2025-10-06-example.md
 
-  function slugToTitle(slug){
-    return slug
-      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-      .replace(/\.(md|txt)$/,'')
-      .split('-')
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ');
-  }
-
-  function dateFromSlug(slug){
-    const m = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if(!m) return '';
-    const d = new Date(+m[1], +m[2]-1, +m[3]);
-    return d.toLocaleDateString('lt-LT', {year:'numeric', month:'long', day:'numeric'});
-  }
-
-  async function loadPost(){
-    const articleEl = document.getElementById('post-content');
-    if(!filename){
-      document.getElementById('post-title').textContent = 'Post not found';
-      articleEl.textContent = 'Missing ?file= parameter.';
-      return;
+    function slugToTitle(slug) {
+      return slug
+        .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+        .replace(/\.(md|txt)$/,'')
+        .split('-')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
     }
 
-    const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
-
-    try{
-      const res = await fetch(rawUrl);
-      if(!res.ok) throw new Error('Fetch failed');
-      const text = await res.text();
-
-      const title = slugToTitle(filename);
-      const date = dateFromSlug(filename);
-      document.getElementById('post-title').textContent = title;
-      document.title = `${title} — politinis_kampas`;
-      document.getElementById('post-meta').textContent = date ? `${date}` : '';
-
-      // ✅ Proper markdown conversion
-      const converter = new showdown.Converter({
-        simplifiedAutoLink: true,
-        tables: true,
-        strikethrough: true,
-        ghCodeBlocks: true,
-        smoothLivePreview: true
-      });
-
-      // Make sure newlines are preserved correctly
-      const normalized = text.replace(/\r\n/g, "\n").trim();
-      const html = converter.makeHtml(normalized);
-
-      articleEl.innerHTML = html;
-
-      // Optional: style markdown headers
-      document.querySelectorAll('h1,h2,h3').forEach(h => {
-        h.style.color = '#ffcc00';
-        h.style.marginTop = '1.4rem';
-        h.style.marginBottom = '0.6rem';
-      });
-
-    }catch(e){
-      document.getElementById('post-title').textContent = 'Error loading post';
-      articleEl.textContent = 'Could not fetch or render the file.';
-      console.error(e);
+    function dateFromSlug(slug) {
+      const m = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!m) return '';
+      const d = new Date(+m[1], +m[2]-1, +m[3]);
+      return d.toLocaleDateString('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', loadPost);
-</script>
+    // Normalize weird characters so markdown headings like ## work
+    function normalizeMd(text) {
+      return text
+        .replace(/^\uFEFF/, '')        // remove BOM
+        .replace(/\r\n/g, '\n')        // fix Windows line breaks
+        .replace(/\u00A0/g, ' ')       // replace non-breaking spaces
+        .replace(/^[ \t]{0,3}(#{1,6})\s+/gm, (_, h) => `${h} `)
+        .trim();
+    }
 
+    async function loadPost() {
+      const content = document.getElementById('post-content');
+
+      if (!filename) {
+        document.getElementById('post-title').textContent = 'Post not found';
+        content.textContent = 'Missing ?file= parameter.';
+        return;
+      }
+
+      const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
+
+      try {
+        const res = await fetch(rawUrl);
+        if (!res.ok) throw new Error('Fetch failed');
+        const raw = await res.text();
+
+        const title = slugToTitle(filename);
+        const date  = dateFromSlug(filename);
+        document.getElementById('post-title').textContent = title;
+        document.title = `${title} — politinis_kampas`;
+        document.getElementById('post-meta').textContent = date || '';
+
+        const md = normalizeMd(raw);
+        marked.setOptions({
+          gfm: true,
+          breaks: false,
+          headerIds: true,
+          mangle: false,
+          smartypants: true
+        });
+
+        let html = marked.parse(md);
+
+        // fallback if headings failed (rare edge case)
+        if (/^##\s/m.test(md) && !/<h2>/i.test(html)) {
+          html = md.replace(/^(#{1,6})\s+(.+)$/gm, (m, hashes, text) =>
+            `<h${hashes.length}>${text}</h${hashes.length}>`)
+            .replace(/\n{2,}/g, '</p><p>')
+            .replace(/^([^<].*?)$/gm, '<p>$1</p>');
+        }
+
+        content.innerHTML = html;
+
+        // style headings yellow dynamically
+        document.querySelectorAll('h1,h2,h3,h4').forEach(h => {
+          h.style.color  = '#ffcc00';
+          h.style.margin = '1.2rem 0 0.6rem';
+        });
+
+      } catch (e) {
+        document.getElementById('post-title').textContent = 'Error loading post';
+        content.textContent = 'Could not fetch or render the file.';
+        console.error(e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPost);
+  </script>
 </body>
 </html>
