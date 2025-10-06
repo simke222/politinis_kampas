@@ -1,90 +1,237 @@
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // ====== Configure your repo here ======
-  const GITHUB_USER  = 'simke222';
-  const GITHUB_REPO  = 'politinis_kampas';
-  const GITHUB_BRANCH = 'main';
-  // ======================================
-
-  const postsApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/posts?ref=${GITHUB_BRANCH}`;
-  const latestContainer = document.getElementById('latest-posts');
-
-  function slugToTitle(name) {
-    const cleaned = name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.(md|txt|html)$/, '');
-    return cleaned.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-  }
-
-  function dateFromSlug(name) {
-    const m = name.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (!m) return null;
-    return new Date(+m[1], +m[2] - 1, +m[3]);
-  }
-
-  function formatDate(d) {
-    try {
-      return d.toLocaleDateString('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
-    } catch {
-      return '';
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>politinis_kampas — Home</title>
+  <meta name="description" content="politinis_kampas — personal blog on world conflicts, analysis, and news." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="./favicon.ico" />
+  <style>
+    /* Ensure readability if your css/style.css fails to load */
+    body {
+      background: #000;
+      color: #f7f7f7;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
     }
-  }
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffcc00;
+      margin-bottom: 1rem;
+    }
+    .latest-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card.post {
+      background: #111;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .card.post:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+    }
+    .card-link {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
+    .card-title {
+      color: #ffcc00;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 0.3rem;
+    }
+    .card-meta {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 0.6rem;
+    }
+    .card-text {
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+    .btn, .btn.ghost {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+    }
+    .btn {
+      background-color: #ffcc00;
+      color: #000;
+    }
+    .btn:hover {
+      background-color: #e6b800;
+    }
+    .btn.ghost {
+      border: 2px solid #ffcc00;
+      color: #ffcc00;
+    }
+    .btn.ghost:hover {
+      background-color: #ffcc00;
+      color: #000;
+    }
+    .muted {
+      color: #777;
+    }
+  </style>
+</head>
 
-  async function loadLatest() {
-    try {
-      const res = await fetch(postsApi);
-      if (!res.ok) throw new Error('GitHub API error');
-      const files = await res.json();
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html">politinis_kampas</a>
+      <nav class="nav">
+        <a href="./index.html" class="active">Home</a>
+        <a href="./blog.html">Blog</a>
+        <a href="./feed.html">RSS Feed</a>
+        <a href="./about.html">About</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-      const posts = files
-        .filter(f => f.name.toLowerCase().endsWith('.md') || f.name.toLowerCase().endsWith('.txt'))
-        .sort((a, b) => {
-          const da = dateFromSlug(a.name) || new Date(0);
-          const db = dateFromSlug(b.name) || new Date(0);
-          return db - da;
-        })
-        .slice(0, 2); // Show only 2 latest posts
+  <main class="container grid">
+    <section class="content">
+      <h1 class="page-title">Latest from the blog</h1>
 
-      if (posts.length === 0) {
-        latestContainer.innerHTML = '<p class="muted">No posts found yet.</p>';
-        return;
+      <!-- JS dynamically loads posts here -->
+      <div id="latest-posts" class="latest-posts">
+        <p class="muted">Loading latest articles…</p>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn" href="./blog.html">View all posts</a>
+        <a class="btn ghost" href="./feed.html">Browse live RSS feed</a>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="widget">
+        <h3 class="widget-title">Quick Links</h3>
+        <ul class="list">
+          <li><a href="./feed.html">Live Conflict Headlines</a></li>
+          <li><a href="./blog.html">All Blog Posts</a></li>
+          <li><a href="./about.html">About the Author</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> politinis_kampas</span>
+      <a class="rss" href="./feed.html">RSS Feed Page</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ====== Configure your repo here ======
+    const GITHUB_USER  = 'simke222';
+    const GITHUB_REPO  = 'politinis_kampas';
+    const GITHUB_BRANCH = 'main';
+    // ======================================
+
+    const postsApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/posts?ref=${GITHUB_BRANCH}`;
+    const latestContainer = document.getElementById('latest-posts');
+
+    function slugToTitle(name) {
+      const cleaned = name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.(md|txt|html)$/, '');
+      return cleaned.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    function dateFromSlug(name) {
+      const m = name.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!m) return null;
+      return new Date(+m[1], +m[2] - 1, +m[3]);
+    }
+
+    function formatDate(d) {
+      try {
+        return d.toLocaleDateString('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
+      } catch {
+        return '';
       }
+    }
 
-      const cards = await Promise.all(posts.map(async p => {
-        const title = slugToTitle(p.name);
-        const date = dateFromSlug(p.name);
-        const dateStr = date ? formatDate(date) : '';
-        let preview = '';
+    async function loadLatest() {
+      try {
+        const res = await fetch(postsApi);
+        if (!res.ok) throw new Error('GitHub API error');
+        const files = await res.json();
 
-        try {
-          const raw = await fetch(p.download_url).then(r => r.text());
-          // Show more lines (first 6 instead of 3)
-          preview = raw.split(/\r?\n/).slice(0, 6).join(' ')
-            .replace(/[#*_`>\[\]]+/g, '')
-            .trim();
-        } catch {
-          preview = '(Unable to load preview)';
+        const posts = files
+          .filter(f => f.name.toLowerCase().endsWith('.md') || f.name.toLowerCase().endsWith('.txt'))
+          .sort((a, b) => {
+            const da = dateFromSlug(a.name) || new Date(0);
+            const db = dateFromSlug(b.name) || new Date(0);
+            return db - da;
+          })
+          .slice(0, 2); // show only 2 latest posts
+
+        if (posts.length === 0) {
+          latestContainer.innerHTML = '<p class="muted">No posts found yet.</p>';
+          return;
         }
 
-        const link = `post.html?file=${encodeURIComponent(p.name)}`;
-        return `
-          <article class="card post">
-            <a class="card-link" href="${link}">
-              <div class="card-body">
-                <h2 class="card-title">${title}</h2>
-                <p class="card-meta">${dateStr}</p>
-                <p class="card-text">${preview}</p>
-              </div>
-            </a>
-          </article>
-        `;
-      }));
+        const cards = await Promise.all(posts.map(async p => {
+          const title = slugToTitle(p.name);
+          const date = dateFromSlug(p.name);
+          const dateStr = date ? formatDate(date) : '';
+          let preview = '';
 
-      latestContainer.innerHTML = cards.join('');
-    } catch (err) {
-      latestContainer.innerHTML = `<p class="muted">Error loading posts: ${err.message}</p>`;
-      console.error(err);
+          try {
+            const raw = await fetch(p.download_url).then(r => r.text());
+            // Show longer preview (first 6 lines)
+            preview = raw.split(/\r?\n/).slice(0, 6).join(' ')
+              .replace(/[#*_`>\[\]]+/g, '')
+              .replace(/\s+/g, ' ')
+              .trim();
+          } catch {
+            preview = '(Unable to load preview)';
+          }
+
+          const link = `post.html?file=${encodeURIComponent(p.name)}`;
+          return `
+            <article class="card post">
+              <a class="card-link" href="${link}">
+                <div class="card-body">
+                  <h2 class="card-title">${title}</h2>
+                  <p class="card-meta">${dateStr}</p>
+                  <p class="card-text">${preview}</p>
+                </div>
+              </a>
+            </article>
+          `;
+        }));
+
+        latestContainer.innerHTML = cards.join('');
+      } catch (err) {
+        latestContainer.innerHTML = `<p class="muted">Error loading posts: ${err.message}</p>`;
+        console.error(err);
+      }
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', loadLatest);
-</script>
+    document.addEventListener('DOMContentLoaded', loadLatest);
+  </script>
+</body>
+</html>
