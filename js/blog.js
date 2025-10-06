@@ -90,7 +90,16 @@ async function loadList() {
         let preview = '';
         try {
           const raw = await fetch(p.download_url).then(r => r.text());
-          preview = raw.split(/\r?\n/).slice(0, 3).join(' ');
+         // Extract first few lines and remove markdown symbols for a clean preview
+preview = raw
+  .split(/\r?\n/)
+  .slice(0, 4)
+  .join(' ')
+  .replace(/[#*_`>\[\]]+/g, '') // remove markdown symbols
+  .replace(/!\[.*?\]\(.*?\)/g, '') // remove image markdown
+  .replace(/\s+/g, ' ') // collapse extra spaces
+  .trim();
+
         } catch (err) {
           preview = '(Unable to load preview)';
         }
