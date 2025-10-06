@@ -1,0 +1,27 @@
+# Ukraina toliau kovoja, kol Europa tyli
+*Date:* Spalio 6, 2025
+*Category:* [Europe]
+
+## Trumpai drūtai.
+
+Ukrainos prezidentas Volodymyras Zelenskis neseniai pareiškė, kad Vladimiras Putinas tyčiojasi iš Vakarų, o pasaulis nesugebėjo tinkamai atsakyti į Rusijos smūgius. Tai ne tik žodžiai – tai šauksmas, kuris skamba vis garsiau, kai matome, kaip pasaulis reaguoja į besitęsiančią agresiją.
+
+## Kas įvyko?
+
+Zelenskis pasakė, kad Rusijos atakos į Ukrainą rodo ne tik karo brutalumą, bet ir Vakarų silpnumą. Jo teigimu, Putinas, kaip visada, demonstruoja savo neapykantą ir niekinimą, o pusė pasaulio tarsi išėjo atostogų, kai reikia reaguoti į Rusijos agresiją. Tai nėra naujiena – matome, kaip Vakarų šalys, turinčios galimybių ir resursų, stengiasi laikytis neutralumo, kol Ukraina kovoja su ketvirtąja pagal dydį pasaulyje armija.
+
+ Pasaulis, kaip žinome, yra sudėtingas. Po Šaltojo karo baigėsi ne tik ideologinės kovos, bet ir atsirado tikėjimas, kad demokratija gali triumfuoti visur. Tačiau Putinas sugrąžino mums senus, gerai pažįstamus demonus. 2014 metais, kai Rusija aneksavo Krymą, daugelis galvojo, kad tai tik vienkartinis incidentas. Dabar, kai Ukraina patyria neįsivaizduojamus nuostolius ir karą, matome, kad tai buvo tik ledkalnio viršūnė. Vakarų reakcija buvo labiau „švelni ir draugiška“, nei „griežta ir ryžtinga“. 
+
+## Mano nuomonė.
+
+ Žiūrint iš šalies, atrodo, kad Putinas ir jo režimas gali daryti ką nori, o Vakarai tik stebi iš šono, lyg tai būtų kokia pigaus kino premjera. Žinoma, galime pasakyti, kad Vakarai įgyvendino sankcijas, tačiau ar tai tikrai padeda? Ar galima rimtai tikėtis, kad sušaldytos sąskaitos ir išmesti oligarchai pakeis Rusijos politiką? Manau, kad tai labiau simbolinis gestas, nei reali grėsmė Putino valdžiai. Panašu, kad mūsų išmintingos ir perspektyvios valstybės vėl elgiasi kaip šunys už tvoros, visada pasiruošę kovoti, bet visada pamirštantys, kad reikia iš tikrųjų imtis veiksmų.
+
+Klausimas, kodėl Vakarai bijo nuolatinių pasekmių. Galbūt bijo, kad Putinas gali pasinaudoti jėga, o gal tiesiog nenori sutrikdyti savo „puikaus“ gyvenimo. Tačiau ar tai tikrai teisinga? Ar neturėtume laikytis principo, kad geriau padėti dabar nei kentėti vėliau? Ironiška, bet mes matome, kad Putinas, kaip geras  artistas, žino, kada pasirodyti ir kaip išnaudoti situaciją, o Vakarai vis dar bando apsispręsti, ar pirkti bilietus į šį šou.
+
+## Pasekmės.
+
+ Jei pasaulis ir toliau tylės, tai gali sukelti dar didesnius neramumus. Ką daro nesėkmė reaguojant į agresiją? Ji skatina agresiją. Putinas, matydamas, kad pasaulis nesugeba atsakyti, gali pasijusti kaip galintis daryti viską, ko tik nori. Ir kas žino, galbūt kitose šalyse atsiras „Putino sekėjų“, kurie taip pat nuspręs, kad jiems niekas negali pasipriešinti.
+
+## Išvada.
+
+Ar mes, kaip pasaulis, pasiruošę imtis veiksmų, ar lauksime, kol Putinas vėl atvers savo cirko duris? Galbūt laikas ne tik stebėti, bet ir veikti. Ar dar turime vilties, kad Vakarai ras savo drąsą ir pastabumą? Laikas parodys, tačiau kol kas Putinas gali toliau juoktis iš mūsų.
