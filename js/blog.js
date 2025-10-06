@@ -43,13 +43,61 @@ async function fetchTextRaw(url) {
 
 async function loadList() {
   if (!grid) return console.error("Missing #blog-grid container.");
-
   grid.innerHTML = '<p class="muted">Loading posts…</p>';
 
   try {
     const res = await fetch(postsApi);
     if (!res.ok) throw new Error('GitHub API error');
     const files = await res.json();
+
+    // ✅ Relaxed filter (include all files with .md or .txt)
+    const posts = files.filter(f =>
+      f.name.toLowerCase().endsWith('.md') || f.name.toLowerCase().endsWith('.txt')
+    );
+
+    if (posts.length === 0) {
+      grid.innerHTML = '<p class="muted">No posts found (check branch or folder).</p>';
+      console.log('DEBUG:', files); // debug output to console
+      return;
+    }
+
+    // ✅ Sort newest first (safe parsing)
+    posts.sort((a, b) => {
+      const da = dateFromSlug(a.name) || new Date(0);
+      const db = dateFromSlug(b.name) || new Date(0);
+      return db - da;
+    });
+
+    // ✅ Build cards
+    const items = await Promise.all(posts.map(async p => {
+      const title = slugToTitle(p.name);
+      const date = dateFromSlug(p.name);
+      const dateStr = date ? formatDate(date) : '';
+
+      let preview = '';
+      try {
+        const raw = await fetch(p.download_url).then(r => r.text());
+        preview = raw.split(/\r?\n/).slice(0, 3).join(' ');
+      } catch (err) {
+        preview = '(Unable to load preview)';
+      }
+
+      const link = `post.html?file=${encodeURIComponent(p.name)}`;
+      return `
+        <article class="feed-card">
+          <h3><a href="${link}">${title}</a></h3>
+          <p>${preview}</p>
+          <div class="meta">${dateStr}</div>
+        </article>`;
+    }));
+
+    grid.innerHTML = items.join('');
+  } catch (e) {
+    console.error('Error loading posts:', e);
+    grid.innerHTML = `<p class="muted">Failed to load posts: ${e.message}</p>`;
+  }
+}
+
 
     // Filter markdown and text posts
     const posts = files.filter(f =>
