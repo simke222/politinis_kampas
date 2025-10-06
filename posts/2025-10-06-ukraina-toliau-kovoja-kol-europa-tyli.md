@@ -1,5 +1,3 @@
-# Ukraina toliau kovoja, kol Europa tyli
-*Date:* Spalio 6, 2025
 *Category:* [Europe]
 
 ## Trumpai drūtai.
