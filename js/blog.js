@@ -4,7 +4,8 @@ const GITHUB_REPO  = 'politinis_kampas';
 const GITHUB_BRANCH = 'main';
 // ======================================
 
-const postsApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/posts?ref=${GITHUB_BRANCH}`;
+// Handle caching + encoding safely
+const postsApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/posts?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
 const grid = document.getElementById('blog-grid');
 
 function slugToTitle(name){
