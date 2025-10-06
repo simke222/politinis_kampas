@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Post — politinis_kampas</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 
+  <link rel="stylesheet" href="css/style.css" />
   <style>
     body {
       background: #0b0b0b;
@@ -55,7 +55,7 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
 
-    h1, h2, h3, h4 {
+    h1, h2, h3 {
       color: #f5c518;
       margin-top: 1.5rem;
     }
@@ -123,10 +123,12 @@
     <a class="rss" href="feed.html" style="color:#f5c518;">RSS Feed Page</a>
   </footer>
 
+  <!-- ✅ Load Showdown AFTER body so it's available -->
+  <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Config
     const GITHUB_USER = 'simke222';
     const GITHUB_REPO = 'politinis_kampas';
     const GITHUB_BRANCH = 'main';
@@ -169,15 +171,15 @@
 
         let html;
         if (/\.md$/i.test(filename)) {
-          const conv = new showdown.Converter({
+          const converter = new showdown.Converter({
             simplifiedAutoLink: true,
             strikethrough: true,
             tables: true,
             emoji: true
           });
-          html = conv.makeHtml(text);
+          html = converter.makeHtml(text);
         } else {
-          html = `<pre>${text.replace(/[&<>]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[s]))}</pre>`;
+          html = `<pre>${text}</pre>`;
         }
 
         document.getElementById('post-content').innerHTML = html;
@@ -188,7 +190,7 @@
       }
     }
 
-    loadPost();
+    document.addEventListener('DOMContentLoaded', loadPost);
   </script>
 </body>
 </html>
