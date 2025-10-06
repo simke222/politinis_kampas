@@ -126,71 +126,85 @@
   <!-- ✅ Load Showdown AFTER body so it's available -->
   <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-    const GITHUB_USER = 'simke222';
-    const GITHUB_REPO = 'politinis_kampas';
-    const GITHUB_BRANCH = 'main';
+  // Config your repo here:
+  const GITHUB_USER = 'simke222';
+  const GITHUB_REPO = 'politinis_kampas';
+  const GITHUB_BRANCH = 'main';
 
-    const params = new URLSearchParams(location.search);
-    const filename = params.get('file');
+  const params = new URLSearchParams(location.search);
+  const filename = params.get('file'); // e.g., 2025-10-06-gaza-analysis.md
 
-    function slugToTitle(slug) {
-      const cleaned = slug
-        .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-        .replace(/\.(md|txt)$/, '');
-      return cleaned.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  function slugToTitle(slug){
+    return slug
+      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+      .replace(/\.(md|txt)$/,'')
+      .split('-')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  }
+
+  function dateFromSlug(slug){
+    const m = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(!m) return '';
+    const d = new Date(+m[1], +m[2]-1, +m[3]);
+    return d.toLocaleDateString('lt-LT', {year:'numeric', month:'long', day:'numeric'});
+  }
+
+  async function loadPost(){
+    const articleEl = document.getElementById('post-content');
+    if(!filename){
+      document.getElementById('post-title').textContent = 'Post not found';
+      articleEl.textContent = 'Missing ?file= parameter.';
+      return;
     }
 
-    function dateFromSlug(slug) {
-      const m = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if (!m) return '';
-      const d = new Date(+m[1], +m[2] - 1, +m[3]);
-      return d.toLocaleDateString('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
+    const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
+
+    try{
+      const res = await fetch(rawUrl);
+      if(!res.ok) throw new Error('Fetch failed');
+      const text = await res.text();
+
+      const title = slugToTitle(filename);
+      const date = dateFromSlug(filename);
+      document.getElementById('post-title').textContent = title;
+      document.title = `${title} — politinis_kampas`;
+      document.getElementById('post-meta').textContent = date ? `${date}` : '';
+
+      // ✅ Proper markdown conversion
+      const converter = new showdown.Converter({
+        simplifiedAutoLink: true,
+        tables: true,
+        strikethrough: true,
+        ghCodeBlocks: true,
+        smoothLivePreview: true
+      });
+
+      // Make sure newlines are preserved correctly
+      const normalized = text.replace(/\r\n/g, "\n").trim();
+      const html = converter.makeHtml(normalized);
+
+      articleEl.innerHTML = html;
+
+      // Optional: style markdown headers
+      document.querySelectorAll('h1,h2,h3').forEach(h => {
+        h.style.color = '#ffcc00';
+        h.style.marginTop = '1.4rem';
+        h.style.marginBottom = '0.6rem';
+      });
+
+    }catch(e){
+      document.getElementById('post-title').textContent = 'Error loading post';
+      articleEl.textContent = 'Could not fetch or render the file.';
+      console.error(e);
     }
+  }
 
-    async function loadPost() {
-      if (!filename) {
-        document.getElementById('post-title').textContent = 'Post not found';
-        document.getElementById('post-content').textContent = 'Missing ?file=… parameter.';
-        return;
-      }
+  document.addEventListener('DOMContentLoaded', loadPost);
+</script>
 
-      const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/posts/${encodeURIComponent(filename)}`;
-      try {
-        const res = await fetch(rawUrl);
-        if (!res.ok) throw new Error('Fetch failed');
-        const text = await res.text();
-
-        const title = slugToTitle(filename);
-        const date = dateFromSlug(filename);
-        document.getElementById('post-title').textContent = title;
-        document.title = `${title} — politinis_kampas`;
-        document.getElementById('post-meta').textContent = date ? `${date}` : '';
-
-        let html;
-        if (/\.md$/i.test(filename)) {
-          const converter = new showdown.Converter({
-            simplifiedAutoLink: true,
-            strikethrough: true,
-            tables: true,
-            emoji: true
-          });
-          html = converter.makeHtml(text);
-        } else {
-          html = `<pre>${text}</pre>`;
-        }
-
-        document.getElementById('post-content').innerHTML = html;
-      } catch (e) {
-        document.getElementById('post-title').textContent = 'Error loading post';
-        document.getElementById('post-content').textContent = 'Could not fetch the file. Check file name and repo path.';
-        console.error(e);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadPost);
-  </script>
 </body>
 </html>
